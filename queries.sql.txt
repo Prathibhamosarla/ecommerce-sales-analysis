@@ -1,0 +1,120 @@
+SELECT * FROM orders;
+-- 1.Sort orders by date
+SELECT * FROM orders ORDER BY `Order Date`;
+
+-- 2.Find count unique states
+SELECT COUNT(DISTINCT state) FROM orders;
+
+-- 3.Total Sales
+SELECT SUM(amount) as total_sales FROM details;
+
+
+-- 4.Sales by Category
+SELECT category,SUM(amount) AS total_sales
+ FROM details 
+ GROUP BY category;
+
+
+ -- 5.Join the Tables
+ SELECT d.amount,d.category,d.paymentMode,o.customerName,o.state 
+ FROM details d 
+ INNER JOIN orders o 
+ ON d.Order_ID = o.Order_ID
+ ORDER BY amount ;
+ 
+ -- 6.Top 5 Customers by Sales
+ SELECT o.customername,SUM(d.amount) AS total_sales
+ FROM details d
+ JOIN orders o
+ ON d.order_ID = o.order_id
+ GROUP BY o.customername
+ ORDER BY SUM(amount) DESC
+ LIMIT 5;
+ 
+ -- 7.Profit by Category
+ SELECT category,SUM(profit) AS profits
+ FROM details
+ GROUP BY category;
+ 
+ -- 8.Top products ranking:
+ SELECT category,SUM(amount) as total_sales,
+ RANK() OVER( ORDER BY SUM(amount) DESC) as rnk
+ FROM details
+ GROUP BY category;
+ 
+ -- 9.how many items each order contains
+ SELECT ORDER_ID,COUNT(*) AS total_items
+ FROM details
+ GROUP BY ORDER_ID
+ ORDER BY total_items DESC;
+ 
+ -- 10. Payment Mode Analysis,which payment method generates most sales.
+ SELECT paymentMOde,SUM(amount) AS sales
+ FROM details
+ GROUP BY paymentMode
+ ORDER BY sales DESC;
+ 
+ -- 11.Quantity Sold by Category
+ SELECT category,sum(quantity) as sold_quantity
+ from details
+ group by category
+ order by sold_quantity desc;
+ 
+ -- 12.sales trend by month
+SELECT 
+MONTH(Order_Date) AS month,
+SUM(d.amount) AS sales
+FROM orders o
+JOIN details d
+ON o.order_id = d.order_id
+GROUP BY MONTH(Order_Date)
+ORDER BY MONTH;
+ 
+ -- 13.Top 5 States by Sales
+ SELECT o.state,SUM(d.amount) AS sales
+ FROM orders o
+ JOIN details d
+ ON o.order_id = d.order_id
+ GROUP BY o.state
+ ORDER BY sales DESC
+ LIMIT 5;
+ 
+ -- 14.Profit Margin by Category
+ SELECT category,
+ SUM(profit) as profit ,
+ SUM(amount) as sales,
+ ROUND((SUM(profit)/SUM(amount))*100,2) AS profit_margin
+ FROM details
+ GROUP BY category;
+ 
+ -- 15.Show orders where company lost money.
+ SELECT *
+ FROM details
+ WHERE Profit < 0
+ ORDER BY profit;
+ 
+ -- 16. Segment customers based on their total spending.
+-- Classify customers into three groups:
+-- High Value → total spending greater than 5000
+-- Medium Value → total spending between 2000 and 5000
+-- Low Value → total spending less than 2000
+-- Calculate the total amount spent by each customer and assign a customer type using a CASE statement.
+ SELECT O.customername, SUM(d.amount) as total_spending,
+ CASE
+ WHEN sum(d.amount) > 5000 THEN 'High Value'
+ WHEN sum(d.amount) between 2000 AND 5000 then 'Medium Value'
+ ELSE 'low value'
+ ENd as Customer_TYPE
+ from details d
+ JOIN orders o
+ ON o.order_id = d.order_id
+ GROUP BY o.customername
+ order by total_spending DESC;
+ 
+ -- 17.Top Product in Each Category (Window Function)
+ SELECT *
+ FROM (SELECT category,sub_category,SUM(amount),
+ RANK() OVER(order by SUM(amount)) as rnk
+ FROM details
+ GROUP BY category,sub_category) t
+ WHERE rnk = 1;

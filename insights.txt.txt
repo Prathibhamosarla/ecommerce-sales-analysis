@@ -1,0 +1,9 @@
+E-Commerce Sales Analysis Insights
+
+1. Electronics category generates the highest sales.
+2. Clothing has the largest number of items sold.
+3. Credit Card is the most used payment method.
+4. Some products generate negative profit (loss).
+5. Certain states contribute more sales than others.
+6. Some customers spend more than 5000 and are classified as High Value customers.
+7. Profit margin varies significantly across categories.

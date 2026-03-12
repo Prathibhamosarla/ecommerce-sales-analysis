@@ -1,0 +1,20 @@
+E-Commerce Sales Analysis Project
+
+Tools Used:
+SQL, Excel
+
+Description:
+Analyzed e-commerce sales data using SQL queries to identify
+sales trends, top customers, payment method usage, and profit margins.
+
+Key Analysis:
+- Sales by Category
+- Monthly Sales Trend
+- Payment Mode Analysis
+- Top Performing States
+- Customer Segmentation
+- Profit Margin by Category
+
+Outcome:
+Built an Excel dashboard to visualize business insights
+and support decision-making.
